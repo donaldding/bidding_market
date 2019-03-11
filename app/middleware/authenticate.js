@@ -16,7 +16,7 @@ module.exports = function () {
         }
         userId = decoded.id
       })
-      ctx.current_user = await User.findUserById(userId)
+      ctx.current_user = await User.findById(userId)
       if (ctx.current_user) {
         return next()
       }

@@ -8,13 +8,13 @@ const createUser = require('./createUser')
 
 // close the server after each test
 afterAll(() => {
-  server.close()
+  return server.close()
 })
 beforeEach(async () => {
-  truncate()
+  return truncate()
 })
 afterEach(async () => {
-  await truncate()
+  return truncate()
 })
 
 describe('POST /api/session/sign_up', () => {
@@ -24,17 +24,20 @@ describe('POST /api/session/sign_up', () => {
     const response = await request(server)
       .post('/api/session/sign_up')
       .send({
-        cellphone: '12345678',
+        schood_num: '12345678',
         password: '123456',
         name: 'test',
-        gender: 'f',
-        is_admin: true,
+        enter_year: '2010',
+        acadamy: 'sci'
       })
     expect(response.status).toEqual(200)
     expect(response.type).toEqual('application/json')
     return User.findAll().then(datas => {
-      expect(datas[0].is_admin).toEqual(true)
       expect(datas.length).toEqual(1)
+      expect(datas[0].schood_num).toEqual('12345678')
+      expect(datas[0].name).toEqual('test')
+      expect(datas[0].enter_year).toEqual('2010')
+      expect(datas[0].acadamy).toEqual('sci')
     })
   })
 })
@@ -48,33 +51,17 @@ describe('GET /api/users/info', () => {
       .set('Authorization', createUser.body.data.token)
     expect(response.status).toEqual(200)
     expect(response.type).toEqual('application/json')
-    expect(response.body.data.cellphone).toEqual('12345678')
-  })
-})
-
-describe('POST /api/users/update', () => {
-  test('should respond as expected', async () => {
-    const createUser = await login()
-
-    const response = await request(server)
-      .post('/api/users/update')
-      .set('Authorization', createUser.body.data.token)
-      .send({
-        name: 'test1',
-        avatar: 'www.baidu.com',
-        gender: 'g',
-        balance: 123
-      })
-    expect(response.status).toEqual(200)
-    expect(response.type).toEqual('application/json')
-    expect(response.body.data.name).toEqual('test1')
-    expect(response.body.data.avatar).toEqual('www.baidu.com')
-    expect(response.body.data.gender).toEqual('g')
-    expect(response.body.data.balance).toEqual(null)
+    expect(response.body.data.schood_num).toEqual('12345678')
   })
 })
 
 describe('GET /api/users/all', () => {
+  beforeEach(() => {
+    return truncate()
+  })
+  afterEach(() => {
+    return truncate()
+  })
   test('should return users(When the user is 1)', async () => {
     const loginUser = await login()
 
@@ -89,7 +76,7 @@ describe('GET /api/users/all', () => {
     const loginUser = await login()
 
     for (let i = 1; i <= 21; i++) {
-      await createUser()
+      await createUser(i)
     }
 
     const response = await request(server)
@@ -104,7 +91,7 @@ describe('GET /api/users/all', () => {
     const loginUser = await login()
 
     for (let i = 1; i <= 21; i++) {
-      await createUser()
+      await createUser(i)
     }
 
     const response = await request(server)
@@ -122,7 +109,7 @@ describe('GET /api/users/all', () => {
     const loginUser = await login()
 
     for (let i = 1; i <= 21; i++) {
-      await createUser()
+      await createUser(i)
     }
 
     const response = await request(server)
