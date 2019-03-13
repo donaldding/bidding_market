@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function (models) {
     User.hasMany(models['Product'], {
       foreignKey: 'owner_id',
-      as: 'publish_products'
+      as: 'PublishProducts'
     }),
     User.hasMany(models['Product'], {
       foreignKey: 'last_buyer_id',
-      as: 'bought_products'
+      as: 'BoughtProducts'
     })
   }
   return User

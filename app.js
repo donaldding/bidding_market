@@ -23,7 +23,9 @@ app.use(
   })
 )
 app.use(json())
-app.use(logger())
+if (process.env.NODE_ENV != 'test') {
+  app.use(logger())
+}
 app.use(require('koa-static')(`${__dirname}/public`))
 
 app.use(
