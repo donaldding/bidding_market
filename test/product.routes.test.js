@@ -10,10 +10,7 @@ afterAll(() => {
   return server.close()
 })
 beforeEach(async () => {
-  return truncate()
-})
-afterEach(async () => {
-  return truncate()
+  await truncate()
 })
 
 describe('POST /api/products/', () => {
@@ -28,7 +25,8 @@ describe('POST /api/products/', () => {
         name: 'test',
         description: 'aa',
         start_price: 100,
-        banner_url: 'abc'
+        banner_url: 'abc',
+        duration: 100
       })
       .set('Authorization', loginUser.body.data.token)
 
@@ -75,6 +73,6 @@ describe('GET /api/products/my', () => {
     expect(response.status).toEqual(200)
     expect(response.type).toEqual('application/json')
     expect(response.body.data[0].name).toEqual('test')
-    expect(response.body.data[0].owner.id).toEqual(user.id)
+    expect(response.body.data[0].Owner.id).toEqual(user.id)
   })
 })

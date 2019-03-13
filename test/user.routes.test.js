@@ -11,10 +11,7 @@ afterAll(() => {
   return server.close()
 })
 beforeEach(async () => {
-  return truncate()
-})
-afterEach(async () => {
-  return truncate()
+  await truncate()
 })
 
 describe('POST /api/session/sign_up', () => {
@@ -56,12 +53,10 @@ describe('GET /api/users/info', () => {
 })
 
 describe('GET /api/users/all', () => {
-  beforeEach(() => {
-    return truncate()
+  beforeEach(async () => {
+    await truncate()
   })
-  afterEach(() => {
-    return truncate()
-  })
+
   test('should return users(When the user is 1)', async () => {
     const loginUser = await login()
 

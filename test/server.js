@@ -1,5 +1,5 @@
-const app = require('../app');
+const app = require('../app')
 
-const port = process.env.PORT || 3000;
-const server = app.listen(port);
-module.exports = server;
+const port = process.env.PORT || 3003
+const server = app.listen(port)
+module.exports = server

@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       start_price: DataTypes.INTEGER,
       curr_price: DataTypes.INTEGER,
+      last_buyer_id: DataTypes.INTEGER,
+      duration: DataTypes.INTEGER,
       state: DataTypes.STRING,
       banner_url: DataTypes.STRING
     },
@@ -15,15 +17,15 @@ module.exports = (sequelize, DataTypes) => {
   Product.associate = function (models) {
     Product.belongsTo(models['User'], {
       foreignKey: 'owner_id',
-      as: 'owner'
+      as: 'Owner'
     })
     Product.belongsTo(models['Category'], {
       foreignKey: 'category_id',
-      as: 'category'
+      as: 'Category'
     })
     Product.belongsTo(models['User'], {
       foreignKey: 'last_buyer_id',
-      as: 'buyer'
+      as: 'Buyer'
     })
   }
   return Product

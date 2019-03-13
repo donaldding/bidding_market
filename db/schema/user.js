@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'owner_id',
       as: 'PublishProducts'
     }),
+    User.hasMany(models['Bidding'], {
+      foreignKey: 'user_id',
+      as: 'Biddings'
+    }),
     User.hasMany(models['Product'], {
       foreignKey: 'last_buyer_id',
       as: 'BoughtProducts'

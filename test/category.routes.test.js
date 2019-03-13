@@ -11,10 +11,7 @@ afterAll(() => {
   return server.close()
 })
 beforeEach(async () => {
-  return truncate()
-})
-afterEach(async () => {
-  return truncate()
+  await truncate()
 })
 
 describe('POST /api/categories/', () => {

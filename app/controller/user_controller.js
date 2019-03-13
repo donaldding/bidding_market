@@ -52,6 +52,7 @@ class UserController {
         })
       }
     } else {
+      ctx.response.status = 412
       ctx.body = renderResponse.ERROR_412('参数错误')
     }
   }
