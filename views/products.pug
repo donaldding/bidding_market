@@ -1,0 +1,69 @@
+extends layout
+
+block content
+  .content
+    h1 商品管理
+    p 当前商品总数#{products.length}
+
+    table.table.table-hover
+      thead
+        tr
+          th(scope='col') id
+          th(scope='col') 名称
+          th(scope='col') 描述
+          th(scope='col') 起拍价
+          th(scope='col') 当前价
+          th(scope='col') 状态
+          th(scope='col') 操作
+      tbody
+        - for(var i = 0; i < products.length; i++){
+          tr
+            td(scope='row')= products[i].id
+            td= products[i].name
+            td= products[i].description
+            td= products[i].start_price / 100.0
+            td= products[i].curr_price / 100.0
+            td= products[i].state
+            td
+              button.btn.btn-info(type="button" data-toggle="modal" data-target="#exampleModal" data-product=products[i] onclick='btnClick(this)') 查看
+        - }
+
+    .modal.fade#exampleModal(tabindex="-1" role="dialog")
+      .modal-dialog(role="document")
+        .modal-content
+          .modal-header
+            .modal-title 商品详情
+          .modal-body
+            table.table
+              tr
+                td id
+                td 
+                  p#product-id
+              tr
+                td 名称
+                td
+                  p#product-name
+              tr
+                td 内容
+                td
+                  p#product-description
+              tr
+                td 起拍价
+                td
+                  p#product-start_price
+              tr
+                td 当前价
+                td
+                  p#product-curr_price
+
+  script.
+    function btnClick(btn){
+      var product = $(btn).data("product")
+      $("#product-id").text(product.id)
+      $("#product-name").text(product.name)
+      $("#product-description").text(product.description)
+      $("#product-start_price").text(product.start_price)
+      $("#product-curr_price").text(product.curr_price)
+      
+      $("#exampleModal").modal('show')
+    }

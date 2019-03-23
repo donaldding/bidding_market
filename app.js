@@ -12,6 +12,7 @@ const authorize = require('./app/middleware/authenticate')
 
 const apiRouter = require('./routes/api')
 const session = require('./routes/api/session')
+const view = require('./routes/api/view')
 
 // error handler
 onerror(app)
@@ -43,6 +44,7 @@ app.use(async (ctx, next) => {
 })
 
 // routes
+app.use(view.routes())
 app.use(session.routes())
 app.use(authorize())
 app.use(apiRouter.routes(), apiRouter.allowedMethods())

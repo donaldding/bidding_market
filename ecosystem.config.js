@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'shared-bicycle',
+      name: 'bidding',
       script: 'pm2 start bin/www',
 
       // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
@@ -24,8 +24,8 @@ module.exports = {
       user: 'root',
       host: '173.248.240.193',
       ref: 'origin/master',
-      repo: 'git@github.com:donaldding/koa_bicycle.git',
-      path: '/var/www/shared-bicycle/production',
+      repo: 'https://github.com/donaldding/bidding_market.git',
+      path: '/var/www/bidding/production',
       'post-deploy':
         'npm install && pm2 reload ecosystem.config.js --env production'
     }

@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  .content
+    h1 用户管理
+    p 当前用户总数#{users.length}
+
+    table.table.table-hover
+      thead
+        tr
+          th(scope='col') id
+          th(scope='col') 姓名
+          th(scope='col') 学号
+          th(scope='col') 入学年份
+          th(scope='col') 学院
+      tbody
+        - for(var i = 0; i < users.length; i++){
+          tr
+            td(scope='row')= users[i].id
+            td= users[i].name
+            td= users[i].schood_num
+            td= users[i].enter_year
+            td= users[i].acadamy
+        - }
+        
+
