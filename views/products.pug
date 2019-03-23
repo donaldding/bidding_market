@@ -10,22 +10,26 @@ block content
         tr
           th(scope='col') id
           th(scope='col') 名称
-          th(scope='col') 描述
+          th(scope='col') 分类
           th(scope='col') 起拍价
           th(scope='col') 当前价
           th(scope='col') 状态
+          th(scope='col') 发布人
+          th(scope='col') 发布时间
           th(scope='col') 操作
       tbody
         - for(var i = 0; i < products.length; i++){
           tr
             td(scope='row')= products[i].id
             td= products[i].name
-            td= products[i].description
+            td= products[i].Category.name
             td= products[i].start_price / 100.0
             td= products[i].curr_price / 100.0
             td= products[i].state
+            td= products[i].Owner.name
+            td= products[i].createdAt.toLocaleString()
             td
-              button.btn.btn-info(type="button" data-toggle="modal" data-target="#exampleModal" data-product=products[i] onclick='btnClick(this)') 查看
+              button.btn.btn-info(type="button" data-toggle="modal" data-index=i data-target="#exampleModal" data-product=products[i] onclick='btnClick(this)') 查看
         - }
 
     .modal.fade#exampleModal(tabindex="-1" role="dialog")
@@ -55,6 +59,10 @@ block content
                 td 当前价
                 td
                   p#product-curr_price
+              tr
+                td 持续时间（小时）
+                td
+                  p#product-duration
 
   script.
     function btnClick(btn){
@@ -64,6 +72,7 @@ block content
       $("#product-description").text(product.description)
       $("#product-start_price").text(product.start_price)
       $("#product-curr_price").text(product.curr_price)
+      $("#product-duration").text(product.duration)
       
       $("#exampleModal").modal('show')
     }

@@ -5,6 +5,6 @@ module.exports = function (product) {
     .create('productPublish', {
       id: product.id
     })
-    .delay(product.duration)
+    .delay(product.duration * 3600 * 1000)
     .save()
 }

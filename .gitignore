@@ -6,3 +6,4 @@ local_password.js
 npm-debug.log
 reports/*
 coverage/
+dump.rdb

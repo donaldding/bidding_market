@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  .content
+    h1 分类管理
+    p 当前分类总数#{datas.length}
+    button.btn.btn-info(type="button" data-toggle="modal" data-target="#exampleModal")  新增
+    table.table.table-hover
+      thead
+        tr
+          th(scope='col') id
+          th(scope='col') 名称
+          th(scope='col') 创建时间
+       
+      tbody
+        - for(var i = 0; i < datas.length; i++){
+          tr
+            td(scope='row')= datas[i].id
+            td= datas[i].name
+            td= datas[i].createdAt.toLocaleString()
+        - }
+        
+    .modal.fade#exampleModal(tabindex="-1" role="dialog")
+      .modal-dialog(role="document")
+        .modal-content
+          .modal-header
+            .modal-title 新增分类
+          .modal-body
+            form(action='/admin/categories' method='post')
+              .form-group
+                label(for="category-name") 名称
+                input.form-control#category-name(name='name' placeholder="请输入名称")
+              button.btn.btn-primary(type="submit") 确认
+
+            
