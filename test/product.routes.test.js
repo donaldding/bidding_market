@@ -2,7 +2,10 @@ const server = require('./server')
 const request = require('supertest')
 const db = require('../db/schema')
 const truncate = require('./truncate')
-const { Product, User } = db
+const {
+  Product,
+  User
+} = db
 const login = require('./login')
 
 // close the server after each test
@@ -74,5 +77,29 @@ describe('GET /api/products/my', () => {
     expect(response.type).toEqual('application/json')
     expect(response.body.data[0].name).toEqual('test')
     expect(response.body.data[0].Owner.id).toEqual(user.id)
+  })
+})
+
+describe('GET /api/products/:id/detail', () => {
+  test('should return product detail', async () => {
+    const loginUser = await login()
+    const product = await Product.create({
+      name: 'test',
+      description: '1234560',
+      start_price: 100,
+      banner_url: 'abc',
+      duration: 100,
+      state: 'ready'
+    })
+    const response = await request(server)
+      .get(`/api/products/${product.id}/detail`)
+      .set('Authorization', loginUser.body.data.token)
+    expect(response.status).toEqual(200)
+    expect(response.type).toEqual('application/json')
+    expect(response.body.data.name).toEqual('test')
+    expect(response.body.data.description).toEqual('1234560')
+    expect(response.body.data.start_price).toEqual(100)
+    expect(response.body.data.banner_url).toEqual('abc')
+    expect(response.body.data.duration).toEqual(100)
   })
 })

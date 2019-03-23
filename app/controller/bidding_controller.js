@@ -1,11 +1,18 @@
-const { Product, Bidding, User } = require('../../db/schema')
+const {
+  Product,
+  Bidding,
+  User
+} = require('../../db/schema')
 const renderResponse = require('../../util/renderJson')
 
 class BiddingController {
   static async create (ctx) {
     const user = ctx.current_user
 
-    let { price, product_id } = ctx.request.body
+    let {
+      price,
+      product_id
+    } = ctx.request.body
     if (price && product_id) {
       const product = await Product.findByPk(product_id)
       if (price <= product.curr_price) {
@@ -38,17 +45,16 @@ class BiddingController {
 
   static async index (ctx) {
     const datas = await Bidding.findAll({
-      include: [
-        {
-          model: User,
-          as: 'User',
-          attributes: ['id', 'name', 'schood_num']
-        },
-        {
-          model: Product,
-          as: 'Product',
-          attributes: ['id', 'name']
-        }
+      include: [{
+        model: User,
+        as: 'User',
+        attributes: ['id', 'name', 'schood_num']
+      },
+      {
+        model: Product,
+        as: 'Product',
+        attributes: ['id', 'name']
+      }
       ]
     })
     ctx.response.status = 200
@@ -58,13 +64,11 @@ class BiddingController {
   static async my (ctx) {
     const user = ctx.current_user
     const datas = await user.getBiddings({
-      include: [
-        {
-          model: Product,
-          as: 'Product',
-          attributes: ['id', 'name']
-        }
-      ]
+      include: [{
+        model: Product,
+        as: 'Product',
+        attributes: ['id', 'name']
+      }]
     })
     ctx.response.status = 200
     ctx.body = renderResponse.SUCCESS_200('', datas)
