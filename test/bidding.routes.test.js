@@ -2,7 +2,11 @@ const server = require('./server')
 const request = require('supertest')
 const db = require('../db/schema')
 const truncate = require('./truncate')
-const { Product, User, Bidding } = db
+const {
+  Product,
+  User,
+  Bidding
+} = db
 const login = require('./login')
 
 // close the server after each test

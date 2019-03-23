@@ -1,5 +1,7 @@
 const path = require('path')
-require('dotenv').config({ path: path.join(__dirname, '/.env') })
+require('dotenv').config({
+  path: path.join(__dirname, '/.env')
+})
 const Koa = require('koa')
 
 const app = new Koa()
@@ -9,7 +11,7 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const authorize = require('./app/middleware/authenticate')
-
+const cors = require('koa2-cors')
 const apiRouter = require('./routes/api')
 const session = require('./routes/api/session')
 const view = require('./routes/api/view')
@@ -45,6 +47,7 @@ app.use(async (ctx, next) => {
 
 // routes
 app.use(view.routes())
+app.use(cors())
 app.use(session.routes())
 app.use(authorize())
 app.use(apiRouter.routes(), apiRouter.allowedMethods())
