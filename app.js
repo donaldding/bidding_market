@@ -15,14 +15,21 @@ const cors = require('koa2-cors')
 const apiRouter = require('./routes/api')
 const session = require('./routes/api/session')
 const view = require('./routes/api/view')
+const koaBody = require('koa-body')
 
 // error handler
 onerror(app)
 
 // middlewares
 app.use(
-  bodyparser({
-    enableTypes: ['json', 'form', 'text']
+  // bodyparser({
+  //   enableTypes: ['json', 'form', 'text']
+  // })
+  koaBody({
+    multipart: true,
+    formidable: {
+      maxFileSize: 500 * 1024 * 1024
+    }
   })
 )
 app.use(json())

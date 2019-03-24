@@ -128,7 +128,6 @@ class UserController {
    * @param {*} ctx
    */
   static async all (ctx) {
-    const user = ctx.current_user
     const data = ctx.request.body
     let list
     let meta

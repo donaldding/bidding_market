@@ -93,12 +93,12 @@ describe('GET /api/users/all', () => {
       .get('/api/users/all')
       .set('Authorization', loginUser.body.data.token)
       .send({
-        per_page: 21
+        per_page: 19
       })
     expect(response.status).toEqual(200)
     expect(response.type).toEqual('application/json')
-    expect(response.body.meta.per_page).toEqual(21)
-    expect(response.body.data.length).toEqual(21)
+    expect(response.body.meta.per_page).toEqual(19)
+    expect(response.body.data.length).toEqual(19)
   })
   test('should return users(When send page)', async () => {
     const loginUser = await login()

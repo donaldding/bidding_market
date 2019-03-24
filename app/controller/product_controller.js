@@ -10,11 +10,21 @@ class ProductController {
       name,
       description,
       start_price,
-      banner_url,
       category_id,
       duration
     } = ctx.request.body
+
     if (name && start_price && duration && category_id) {
+      const file = ctx.request.body.files.file
+      var banner_url
+      if (file) {
+        const reader = fs.createReadStream(file.path)
+        const ext = file.name.split('.').pop() // 获取上传文件扩展名
+        banner_url = `${__dirname}/../../public/images/${Math.random().toString()}.${ext}`
+        const upStream = fs.createWriteStream(path) // 创建可写流
+        reader.pipe(upStream) // 可读流通过管道写入可写流
+      }
+
       let curr_price = start_price
       const dbProduct = await user.createPublishProduct({
         category_id,
