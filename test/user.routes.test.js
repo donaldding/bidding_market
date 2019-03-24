@@ -90,14 +90,11 @@ describe('GET /api/users/all', () => {
     }
 
     const response = await request(server)
-      .get('/api/users/all')
+      .get('/api/users/all/?per_page=19')
       .set('Authorization', loginUser.body.data.token)
-      .send({
-        per_page: 19
-      })
     expect(response.status).toEqual(200)
     expect(response.type).toEqual('application/json')
-    expect(response.body.meta.per_page).toEqual(19)
+    expect(response.body.meta.per_page).toEqual("19")
     expect(response.body.data.length).toEqual(19)
   })
   test('should return users(When send page)', async () => {

@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const userModel = require('../models/user')
-const { User } = require('../../db/schema')
+const {
+  User
+} = require('../../db/schema')
 const pagination = require('../../util/pagination')
 
 const secret = require('../../config/secret')
@@ -41,7 +43,13 @@ class UserController {
         })
 
         ctx.response.status = 200
-        let { id, name, schood_num, enter_year, acadamy } = dbUser
+        let {
+          id,
+          name,
+          schood_num,
+          enter_year,
+          acadamy
+        } = dbUser
         ctx.body = renderResponse.SUCCESS_200('注册成功', {
           id,
           name,
@@ -81,7 +89,13 @@ class UserController {
         })
 
         ctx.response.status = 200
-        let { id, name, schood_num, enter_year, acadamy } = user
+        let {
+          id,
+          name,
+          schood_num,
+          enter_year,
+          acadamy
+        } = user
         ctx.body = renderResponse.SUCCESS_200('登录成功', {
           id,
           name,
@@ -108,7 +122,13 @@ class UserController {
   static async getUserMsg (ctx) {
     const user = ctx.current_user
     if (user) {
-      let { id, name, schood_num, enter_year, acadamy } = user
+      let {
+        id,
+        name,
+        schood_num,
+        enter_year,
+        acadamy
+      } = user
       ctx.response.status = 200
       ctx.body = renderResponse.SUCCESS_200('获取成功', {
         id,
@@ -128,7 +148,7 @@ class UserController {
    * @param {*} ctx
    */
   static async all (ctx) {
-    const data = ctx.request.body
+    const data = ctx.request.query
     let list
     let meta
     const page = data.page ? data.page : 1
