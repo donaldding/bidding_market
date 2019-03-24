@@ -11,11 +11,13 @@ class ProductController {
       description,
       start_price,
       banner_url,
+      category_id,
       duration
     } = ctx.request.body
-    if (name && start_price && duration) {
+    if (name && start_price && duration && category_id) {
       let curr_price = start_price
       const dbProduct = await user.createPublishProduct({
+        category_id,
         name,
         description,
         start_price,
