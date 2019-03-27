@@ -20,8 +20,8 @@ class ProductController {
       var banner_url = ''
       if (file instanceof Array) {
         for (var i = 0; i < file.length; i++) {
-          const reader = fs.createReadStream(file.path)
-          const ext = file.name.split('.').pop() // 获取上传文件扩展名
+          const reader = fs.createReadStream(file[i].path)
+          const ext = file[i].name.split('.').pop() // 获取上传文件扩展名
           let randomNum = Math.random().toString()
           let path2 = `${__dirname}/../../public/images/${randomNum}.${ext}`
           var url = `/images/${randomNum}.${ext}`
