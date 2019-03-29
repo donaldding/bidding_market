@@ -11,6 +11,9 @@ module.exports = {
       collate: 'utf8mb4_unicode_ci',
       supportBigNumbers: true,
       bigNumberStrings: true
+    },
+    sync: {
+      force: true
     }
   },
   test: {
@@ -38,6 +41,9 @@ module.exports = {
       collate: 'utf8mb4_unicode_ci',
       supportBigNumbers: true,
       bigNumberStrings: true
+    },
+    sync: {
+      force: true
     }
   }
 }
