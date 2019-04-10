@@ -10,11 +10,16 @@ module.exports = (sequelize, DataTypes) => {
       last_buyer_id: DataTypes.INTEGER,
       duration: DataTypes.INTEGER,
       state: DataTypes.STRING,
-      banner_url: DataTypes.STRING
+      banner_url: DataTypes.STRING,
+      is_active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      }
     },
     {}
   )
-  Product.associate = function(models) {
+  Product.associate = function (models) {
     Product.belongsTo(models['User'], {
       foreignKey: 'owner_id',
       as: 'Owner'
