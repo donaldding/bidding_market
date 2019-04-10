@@ -18,6 +18,9 @@ describe('POST /api/session/sign_up', () => {
   test('should respond as expected', async () => {
     const users = await User.findAll()
     expect(users.length).toEqual(0)
+    await User.create({
+      schood_num: '12345678'
+    })
     const response = await request(server)
       .post('/api/session/sign_up')
       .send({
@@ -35,7 +38,60 @@ describe('POST /api/session/sign_up', () => {
       expect(datas[0].name).toEqual('test')
       expect(datas[0].enter_year).toEqual('2010')
       expect(datas[0].acadamy).toEqual('sci')
+      expect(datas[0].is_active).toEqual(true)
     })
+  })
+  test('schood_num is not entry', async () => {
+    const response = await request(server)
+      .post('/api/session/sign_up')
+      .send({
+        schood_num: '12345679',
+        password: '123456',
+        name: 'test',
+        enter_year: '2010',
+        acadamy: 'sci'
+      })
+    expect(response.status).toEqual(403)
+    expect(response.type).toEqual('application/json')
+  })
+})
+
+describe('POST /api/session/sign_in', () => {
+  test('should respond as expected', async () => {
+    await User.create({
+      schood_num: '12345678'
+    })
+    await request(server)
+      .post('/api/session/sign_up')
+      .send({
+        schood_num: '12345678',
+        password: '123456',
+        name: 'test',
+        enter_year: '2010',
+        acadamy: 'sci'
+      })
+    const response = await request(server)
+      .post('/api/session/sign_in')
+      .send({
+        schood_num: '12345678',
+        password: '123456'
+      })
+    expect(response.status).toEqual(200)
+    expect(response.type).toEqual('application/json')
+    expect(response.body.data.schood_num).toEqual('12345678')
+  })
+  test('student is not active', async () => {
+    await User.create({
+      schood_num: '12345678'
+    })
+    const response = await request(server)
+      .post('/api/session/sign_in')
+      .send({
+        schood_num: '12345678',
+        password: '123456'
+      })
+    expect(response.status).toEqual(403)
+    expect(response.type).toEqual('application/json')
   })
 })
 
@@ -113,5 +169,25 @@ describe('GET /api/users/all', () => {
     expect(response.status).toEqual(200)
     expect(response.type).toEqual('application/json')
     expect(response.body.meta.page).toEqual(2)
+  })
+})
+
+describe('POST /api/users/entry', () => {
+  test('should respond as expected', async () => {
+    const loginUser = await login()
+
+    let user = '1234567890,1234567891,1234567892'
+
+    const response = await request(server)
+      .post('/api/users/entry')
+      .set('Authorization', loginUser.body.data.token)
+      .send({
+        schood_nums: user
+      })
+    expect(response.status).toEqual(200)
+    expect(response.type).toEqual('application/json')
+    expect(response.body.data.length).toEqual(3)
+    expect(response.body.data[0].is_active).toEqual(false)
+    expect(response.body.data[0].schood_num).toEqual('1234567890')
   })
 })

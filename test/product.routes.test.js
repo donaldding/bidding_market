@@ -4,7 +4,8 @@ const db = require('../db/schema')
 const truncate = require('./truncate')
 const {
   Product,
-  User
+  User,
+  Category
 } = db
 const login = require('./login')
 
@@ -22,14 +23,18 @@ describe('POST /api/products/', () => {
 
     const products = await Product.findAll()
     expect(products.length).toEqual(0)
+    const category = await Category.create({
+      name: 'test'
+    })
     const response = await request(server)
       .post('/api/products')
       .send({
         name: 'test',
         description: 'aa',
         start_price: 100,
-        banner_url: 'abc',
-        duration: 100
+        duration: 100,
+        category_id: category.id,
+        file: []
       })
       .set('Authorization', loginUser.body.data.token)
 
@@ -40,7 +45,7 @@ describe('POST /api/products/', () => {
       expect(datas[0].name).toEqual('test')
       expect(datas[0].description).toEqual('aa')
       expect(datas[0].start_price).toEqual(100)
-      expect(datas[0].banner_url).toEqual('abc')
+      expect(datas[0].banner_url).toEqual('')
     })
   })
 })

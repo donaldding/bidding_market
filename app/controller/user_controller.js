@@ -20,18 +20,20 @@ class UserController {
 
     if (user.schood_num && user.password) {
       const existUser = await userModel.findBySchoodNum(user.schood_num)
-      if (existUser) {
+      if (existUser && existUser.is_active === false) {
         // 反馈存在用户名
-        ctx.response.status = 403
-        ctx.body = renderResponse.ERROR_403('用户已经存在')
-      } else {
         // 加密密码
         const salt = bcrypt.genSaltSync()
         const hash = bcrypt.hashSync(user.password, salt)
         user.password = hash
-
-        // 创建用户
-        const dbUser = await User.create(user)
+        user.is_active = true
+        await delete user['schood_num']
+        // 更新用户
+        const dbUser = await User.update(user, {
+          where: {
+            id: existUser.id
+          }
+        })
         // 签发token
         const userToken = {
           schood_num: dbUser.schood_num,
@@ -62,6 +64,9 @@ class UserController {
           cellphone,
           dept
         })
+      } else {
+        ctx.response.status = 403
+        ctx.body = renderResponse.ERROR_403('该学号尚未录入，不能注册')
       }
     } else {
       ctx.response.status = 412
@@ -79,7 +84,7 @@ class UserController {
     // 查询用户
     const user = await userModel.findBySchoodNum(data.schood_num)
     // 判断用户是否存在
-    if (user) {
+    if (user && user.is_active === true) {
       // 判断前端传递的用户密码是否与数据库密码一致
       if (bcrypt.compareSync(data.password, user.password)) {
         // 用户token
@@ -114,7 +119,7 @@ class UserController {
       }
     } else {
       ctx.response.status = 403
-      ctx.body = renderResponse.ERROR_403('用户不存在')
+      ctx.body = renderResponse.ERROR_403('用户不存在,或尚未注册')
     }
   }
 
@@ -175,6 +180,32 @@ class UserController {
 
     ctx.response.status = 200
     ctx.body = renderResponse.SUCCESS_200('', list, meta)
+  }
+
+  /**
+   * 录入学号（仅限管理员）
+   * @param {*} ctx
+   */
+  static async entry (ctx) {
+    const data = ctx.request.body
+    let schoodNums = []
+    let arr = data.schood_nums.split(',')
+    for (var key in arr) {
+      let student = {
+        schood_num: arr[key]
+      }
+      schoodNums.push(student)
+    }
+
+    await User.bulkCreate(schoodNums, {
+      individualHooks: true
+    }).then(data => {
+      ctx.response.status = 200
+      ctx.body = renderResponse.SUCCESS_200('录入成功', data)
+    }).catch(r => {
+      ctx.response.status = 412
+      ctx.body = renderResponse.ERROR_412('参数错误')
+    })
   }
 }
 

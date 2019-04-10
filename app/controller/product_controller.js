@@ -19,12 +19,23 @@ class ProductController {
     } = ctx.request.body
 
     if (name && start_price && duration && category_id) {
-      const file = ctx.request.files.file
       var banner_url = ''
-      if (file instanceof Array) {
-        for (var i = 0; i < file.length; i++) {
-          const reader = fs.createReadStream(file[i].path)
-          const ext = file[i].name.split('.').pop() // 获取上传文件扩展名
+      if (process.env.NODE_ENV !== 'test') {
+        const file = ctx.request.files.file
+        if (file instanceof Array) {
+          for (var i = 0; i < file.length; i++) {
+            const reader = fs.createReadStream(file[i].path)
+            const ext = file[i].name.split('.').pop() // 获取上传文件扩展名
+            let randomNum = Math.random().toString()
+            let path2 = `${__dirname}/../../public/images/${randomNum}.${ext}`
+            var url = `/images/${randomNum}.${ext}`
+            const upStream = fs.createWriteStream(path2) // 创建可写流
+            reader.pipe(upStream) // 可读流通过管道写入可写流
+            banner_url += url + ','
+          }
+        } else {
+          const reader = fs.createReadStream(file.path)
+          const ext = file.name.split('.').pop() // 获取上传文件扩展名
           let randomNum = Math.random().toString()
           let path2 = `${__dirname}/../../public/images/${randomNum}.${ext}`
           var url = `/images/${randomNum}.${ext}`
@@ -32,15 +43,6 @@ class ProductController {
           reader.pipe(upStream) // 可读流通过管道写入可写流
           banner_url += url + ','
         }
-      } else {
-        const reader = fs.createReadStream(file.path)
-        const ext = file.name.split('.').pop() // 获取上传文件扩展名
-        let randomNum = Math.random().toString()
-        let path2 = `${__dirname}/../../public/images/${randomNum}.${ext}`
-        var url = `/images/${randomNum}.${ext}`
-        const upStream = fs.createWriteStream(path2) // 创建可写流
-        reader.pipe(upStream) // 可读流通过管道写入可写流
-        banner_url += url + ','
       }
 
       let curr_price = start_price

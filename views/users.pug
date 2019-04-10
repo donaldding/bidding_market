@@ -4,7 +4,7 @@ block content
   .content
     h1 用户管理
     p 当前用户总数#{users.length}
-
+    button.btn.btn-info(type="button" data-toggle="modal" data-target="#exampleModal")  新增
     table.table.table-hover
       thead
         tr
@@ -13,6 +13,7 @@ block content
           th(scope='col') 学号
           th(scope='col') 入学年份
           th(scope='col') 学院
+          th(scope='col') 状态
       tbody
         - for(var i = 0; i < users.length; i++){
           tr
@@ -21,6 +22,17 @@ block content
             td= users[i].schood_num
             td= users[i].enter_year
             td= users[i].acadamy
+            td= users[i].is_active
         - }
         
-
+    .modal.fade#exampleModal(tabindex="-1" role="dialog")
+      .modal-dialog(role="document")
+        .modal-content
+          .modal-header
+            .modal-title 录入用户
+          .modal-body
+            form(action='/admin/users/entry' method='post')
+              .form-group
+                label(for="school-num") 学号
+                input.form-control#school-num(name='schood_nums' placeholder="请输入学号，每个学号逗号隔开" value='')
+              button.btn.btn-primary(type="submit") 确认

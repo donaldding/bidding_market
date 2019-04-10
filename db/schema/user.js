@@ -8,7 +8,12 @@ module.exports = (sequelize, DataTypes) => {
       enter_year: DataTypes.STRING,
       acadamy: DataTypes.STRING,
       cellphone: DataTypes.STRING,
-      dept: DataTypes.STRING
+      dept: DataTypes.STRING,
+      is_active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      }
     }, {}
   )
   User.associate = function (models) {

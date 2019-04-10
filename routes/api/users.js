@@ -5,6 +5,7 @@ router.prefix('/users')
 
 router.get('/info', UserController.getUserMsg)
 router.get('/all', UserController.all)
+router.post('/entry', UserController.entry)
 // router.post('/update', UserController.update)
 
 module.exports = router
