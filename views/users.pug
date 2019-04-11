@@ -33,6 +33,8 @@ block content
           .modal-body
             form(action='/admin/users/entry' method='post')
               .form-group
+                label(for="school-num") 名字
+                input.form-control#school-num(name='name' placeholder="请输入名字" value='')
                 label(for="school-num") 学号
-                input.form-control#school-num(name='schood_nums' placeholder="请输入学号，每个学号逗号隔开" value='')
+                input.form-control#school-num(name='schood_num' placeholder="请输入学号" value='')
               button.btn.btn-primary(type="submit") 确认

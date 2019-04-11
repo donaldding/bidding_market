@@ -87,16 +87,11 @@ router.post('/products/activate', async (ctx, next) => {
 })
 
 router.post('/users/entry', async (ctx, next) => {
-  let schoodNums = []
-  let arr = ctx.request.body.schood_nums.split(',')
-  for (var key in arr) {
-    let student = {
-      schood_num: arr[key]
-    }
-    schoodNums.push(student)
+  let user = {
+    schood_num: ctx.request.body.schood_num,
+    name: ctx.request.body.name
   }
-
-  await User.bulkCreate(schoodNums)
+  await User.create(user)
   const users = await User.findAll()
   await ctx.render('users', {
     users

@@ -20,7 +20,7 @@ class UserController {
 
     if (user.schood_num && user.password) {
       const existUser = await userModel.findBySchoodNum(user.schood_num)
-      if (existUser && existUser.is_active === false) {
+      if (existUser && existUser.is_active === false && existUser.name === user.name) {
         // 反馈存在用户名
         // 加密密码
         const salt = bcrypt.genSaltSync()
@@ -64,6 +64,9 @@ class UserController {
           cellphone,
           dept
         })
+      } else if (existUser && existUser.name !== user.name) {
+        ctx.response.status = 403
+        ctx.body = renderResponse.ERROR_403('学号与名字不匹配，不能注册')
       } else {
         ctx.response.status = 403
         ctx.body = renderResponse.ERROR_403('该学号尚未录入，不能注册')
