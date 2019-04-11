@@ -15,6 +15,7 @@ block content
           th(scope='col') 当前价
           th(scope='col') 状态
           th(scope='col') 发布人
+          th(scope='col') 审核状态
           th(scope='col') 发布时间
           th(scope='col') 操作
       tbody
@@ -27,9 +28,12 @@ block content
             td= products[i].curr_price / 100.0
             td= products[i].state
             td= products[i].Owner.name
+            td= products[i].is_active
             td= products[i].createdAt.toLocaleString()
             td
               button.btn.btn-info(type="button" data-toggle="modal" data-index=i data-target="#exampleModal" data-product=products[i] onclick='btnClick(this)') 查看
+            td
+              button.btn.btn-info(type="button" data-toggle="modal" data-index=i data-product=products[i]  onclick='btnClick2(this)' data-target="#exampleModal2")  审核
         - }
 
     .modal.fade#exampleModal(tabindex="-1" role="dialog")
@@ -64,6 +68,17 @@ block content
                 td
                   p#product-duration
 
+    .modal.fade#exampleModal2(tabindex="-1" role="dialog")
+      .modal-dialog(role="document")
+        .modal-content
+          .modal-header
+            .modal-title 是否通过审核?
+              .modal-body
+                form#review(action='/admin/products/activate' method='post')
+                  .form-group
+                    input.form-control#productId(name='id' readonly="readonly")
+                  button.btn.btn-primary(type="submit") 确认
+
   script.
     function btnClick(btn){
       var product = $(btn).data("product")
@@ -75,4 +90,8 @@ block content
       $("#product-duration").text(product.duration)
       
       $("#exampleModal").modal('show')
+    }
+    function btnClick2(btn){
+      var product = $(btn).data("product")
+      $("#productId").val(product.id)
     }

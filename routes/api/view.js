@@ -1,5 +1,9 @@
 const router = require('koa-router')()
-const { User, Product, Category } = require('../../db/schema')
+const {
+  User,
+  Product,
+  Category
+} = require('../../db/schema')
 
 router.prefix('/admin')
 
@@ -12,22 +16,21 @@ router.get('/', async (ctx, next) => {
 
 router.get('/products', async (ctx, next) => {
   const products = await Product.findAll({
-    include: [
-      {
-        model: User,
-        as: 'Owner',
-        attributes: ['id', 'name']
-      },
-      {
-        model: Category,
-        as: 'Category',
-        attributes: ['id', 'name']
-      },
-      {
-        model: User,
-        as: 'Buyer',
-        attributes: ['id', 'name']
-      }
+    include: [{
+      model: User,
+      as: 'Owner',
+      attributes: ['id', 'name']
+    },
+    {
+      model: Category,
+      as: 'Category',
+      attributes: ['id', 'name']
+    },
+    {
+      model: User,
+      as: 'Buyer',
+      attributes: ['id', 'name']
+    }
     ]
   })
   await ctx.render('products', {
@@ -44,7 +47,9 @@ router.get('/users', async (ctx, next) => {
 
 router.post('/users/:id/delete', async (ctx, next) => {
   User.destroy({
-    where: { id: ctx.params.id }
+    where: {
+      id: ctx.params.id
+    }
   })
   const users = await User.findAll()
   await ctx.render('users', {
@@ -52,29 +57,28 @@ router.post('/users/:id/delete', async (ctx, next) => {
   })
 })
 
-router.post('/products/:id/activate', async (ctx, next) => {
-  const data = await Product.findByPk(ctx.params.id)
+router.post('/products/activate', async (ctx, next) => {
+  const data = await Product.findByPk(ctx.request.body.id)
   await data.update({
     is_active: true
   })
 
   const products = await Product.findAll({
-    include: [
-      {
-        model: User,
-        as: 'Owner',
-        attributes: ['id', 'name']
-      },
-      {
-        model: Category,
-        as: 'Category',
-        attributes: ['id', 'name']
-      },
-      {
-        model: User,
-        as: 'Buyer',
-        attributes: ['id', 'name']
-      }
+    include: [{
+      model: User,
+      as: 'Owner',
+      attributes: ['id', 'name']
+    },
+    {
+      model: Category,
+      as: 'Category',
+      attributes: ['id', 'name']
+    },
+    {
+      model: User,
+      as: 'Buyer',
+      attributes: ['id', 'name']
+    }
     ]
   })
   await ctx.render('products', {
@@ -107,7 +111,9 @@ router.get('/categories', async (ctx, next) => {
 })
 
 router.post('/categories', async (ctx, next) => {
-  let { name } = ctx.request.body
+  let {
+    name
+  } = ctx.request.body
   if (name) {
     await Category.create({
       name
