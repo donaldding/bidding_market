@@ -1,7 +1,4 @@
-const {
-  Product,
-  User
-} = require('../../db/schema')
+const { Product, User } = require('../../db/schema')
 const renderResponse = require('../../util/renderJson')
 const createProductBiddingJob = require('../jobs/createProductBiddingJob')
 const fs = require('fs')
@@ -67,11 +64,16 @@ class ProductController {
 
   static async index (ctx) {
     const datas = await Product.findAll({
-      include: [{
-        model: User,
-        as: 'Owner',
-        attributes: ['id', 'name']
-      }]
+      where: {
+        state: ['ready', 'bidding']
+      },
+      include: [
+        {
+          model: User,
+          as: 'Owner',
+          attributes: ['id', 'name']
+        }
+      ]
     })
     ctx.response.status = 200
     ctx.body = renderResponse.SUCCESS_200('', datas)
@@ -80,11 +82,13 @@ class ProductController {
   static async my (ctx) {
     const user = ctx.current_user
     const datas = await user.getPublishProducts({
-      include: [{
-        model: User,
-        as: 'Owner',
-        attributes: ['id', 'name']
-      }]
+      include: [
+        {
+          model: User,
+          as: 'Owner',
+          attributes: ['id', 'name']
+        }
+      ]
     })
     ctx.response.status = 200
     ctx.body = renderResponse.SUCCESS_200('', datas)
