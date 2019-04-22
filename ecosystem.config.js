@@ -22,7 +22,7 @@ module.exports = {
   deploy: {
     production: {
       user: 'root',
-      host: '173.248.240.193',
+      host: '121.201.80.232',
       ref: 'origin/master',
       repo: 'https://github.com/donaldding/bidding_market.git',
       path: '/var/www/bidding/production',
