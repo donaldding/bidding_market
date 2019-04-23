@@ -32,7 +32,7 @@ module.exports = {
   },
   production: {
     username: 'postgres',
-    password: 'postgres',
+    password: '2124348',
     database: 'bidding_production',
     host: '127.0.0.1',
     dialect: 'postgres',
